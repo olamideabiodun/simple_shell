@@ -3,7 +3,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 void display_prompt(void);
 
@@ -27,12 +29,13 @@ void read_input(char *buffer, int max_length)
  */
 void process_input(const char *user_input)
 {
-	if (strcmp(user_input, "exit") == 0)
-	{
-		printf("Goodbye, exiting the shell.\n");
-		exit(0);
-		printf("%s\n", user_input);
-	}
+	char *goodbye_msg = "Goodbye, exiting the shell.\n";
+        if (strcmp(user_input, "exit") == 0)
+        {
+                write(STDOUT_FILENO, goodbye_msg, 2);
+                exit(0);
+                printf("%s\n", user_input);
+        }
 }
 
 #endif
