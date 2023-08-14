@@ -24,7 +24,23 @@ int _strlen(char *c)
         ;
         return (x);    
 }
-
+int _strcmp(const char *str1, const char *str2);
+/**
+ * _strcmp - compares two strings
+ * @str1: string 1
+ * @str2: string 2
+ * Return: 0 for success
+ */
+int _strcmp(const char *str1, const char *str2)
+{
+        while (*str1 != '\0' && *str2 != '\0') {
+        if (*str1 != *str2)
+            return (*str1 - *str2);
+        str1++;
+        str2++;
+    }
+    return (*str1 - *str2);
+}
 /**
  * read_input - read user's input
  * @buffer: pointer to cahracter array
@@ -36,8 +52,10 @@ void read_input(char *buffer, int max_length)
         int buff_size;
 	fgets(buffer, max_length, stdin);
         buff_size = _strlen(buffer);
-	for (; i < buff_size; i++) {
-        if (buffer[i] == '\n') {
+	for (; i < buff_size; i++)
+        {
+        if (buffer[i] == '\n')
+        {
             buffer[i] = '\0';
             break;
         }
@@ -52,7 +70,7 @@ void read_input(char *buffer, int max_length)
 void process_input(const char *user_input)
 {
 	char *goodbye_msg = "Goodbye, exiting shell.\n";
-        if (strcmp(user_input, "exit") == 0)
+        if (_strcmp(user_input, "exit") == 0)
         {
                 write(STDOUT_FILENO, goodbye_msg, 25);
                 exit(0);
