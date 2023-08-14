@@ -48,18 +48,11 @@ int _strcmp(const char *str1, const char *str2)
  */
 void read_input(char *buffer, int max_length)
 {
-        int i = 0;
         int buff_size;
 	fgets(buffer, max_length, stdin);
         buff_size = _strlen(buffer);
-	for (; i < buff_size; i++)
-        {
-        if (buffer[i] == '\n')
-        {
-            buffer[i] = '\0';
-            break;
-        }
-        }
+	if (buffer[buff_size - 1] == '\n')
+            buffer[buff_size - 1] = '\0';
 }
 
 
