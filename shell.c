@@ -6,7 +6,8 @@
 
 void display_prompt(void)
 {
-	printf("MyShell:~$ ");
+	char *prompt = "$ ";
+    write(STDOUT_FILENO, prompt, 2);
 }
 
 /**
