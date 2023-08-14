@@ -8,8 +8,22 @@
 #include <stdbool.h>
 
 void display_prompt(void);
+int _strlen(char *c);
 
 #define MAX_INPUT_LENGTH 100
+
+/**
+ * _strlen - returns number of chars
+ * @c: string
+ * Return: Success
+ */
+int _strlen(char *c)
+{
+        int x = 0;
+        for (; c[x] != '\0'; x++)
+        ;
+        return (x);    
+}
 
 /**
  * read_input - read user's input
@@ -18,8 +32,16 @@ void display_prompt(void);
  */
 void read_input(char *buffer, int max_length)
 {
+        int i = 0;
+        int buff_size;
 	fgets(buffer, max_length, stdin);
-	buffer[strcspn(buffer, "\n")] = '\0';
+        buff_size = _strlen(buffer);
+	for (; i < buff_size; i++) {
+        if (buffer[i] == '\n') {
+            buffer[i] = '\0';
+            break;
+        }
+        }
 }
 
 
@@ -34,7 +56,7 @@ void process_input(const char *user_input)
         {
                 write(STDOUT_FILENO, goodbye_msg, 25);
                 exit(0);
-                printf("%s\n", user_input);
+                
         }
 }
 
