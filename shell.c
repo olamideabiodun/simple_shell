@@ -17,13 +17,31 @@ void display_prompt(void)
  */
 int main(void)
 {
-	char user_input[MAX_INPUT_LENGTH];
+	char *buff = NULL;
+    size_t buff_size = 0;
+    ssize_t bytes;
 
 	while (1)
 	{
 		display_prompt();
-		read_input(user_input, MAX_INPUT_LENGTH);
-		process_input(user_input);
+
+        /** reading input... */
+
+        bytes = getline(&buff, &buff_size, stdin);
+		/** check if bytes fails and exit*/
+
+		if(bytes == -1)
+	        exit(EXIT_FAILURE);
+
+			/** get the length of the stdin*/
+        buff_size = _strlen(buff);
+
+		  /** setting the newline character to NULL terminating character */
+
+	    if (buff[buff_size - 1] == '\n')
+            buff[buff_size - 1] = '\0';
+        
+		process_input(buff);
 	}
 	return (0);
 }

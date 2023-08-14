@@ -9,6 +9,7 @@
 
 void display_prompt(void);
 int _strlen(char *c);
+int _strcmp(const char *str1, const char *str2);
 
 #define MAX_INPUT_LENGTH 100
 
@@ -24,7 +25,6 @@ int _strlen(char *c)
         ;
         return (x);    
 }
-int _strcmp(const char *str1, const char *str2);
 /**
  * _strcmp - compares two strings
  * @str1: string 1
@@ -41,19 +41,7 @@ int _strcmp(const char *str1, const char *str2)
     }
     return (*str1 - *str2);
 }
-/**
- * read_input - read user's input
- * @buffer: pointer to cahracter array
- * @max_length: maximum numbber of characters that can be read
- */
-void read_input(char *buffer, int max_length)
-{
-        int buff_size;
-	fgets(buffer, max_length, stdin);
-        buff_size = _strlen(buffer);
-	if (buffer[buff_size - 1] == '\n')
-            buffer[buff_size - 1] = '\0';
-}
+
 
 
 /**
