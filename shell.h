@@ -32,7 +32,7 @@ void process_input(const char *user_input)
 	char *goodbye_msg = "Goodbye, exiting shell.\n";
         if (strcmp(user_input, "exit") == 0)
         {
-                write(STDOUT_FILENO, goodbye_msg, 2);
+                write(STDOUT_FILENO, goodbye_msg, 25);
                 exit(0);
                 printf("%s\n", user_input);
         }
