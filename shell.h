@@ -42,8 +42,6 @@ int _strcmp(const char *str1, const char *str2)
     return (*str1 - *str2);
 }
 
-
-
 /**
  * process_input - process user's input
  * @user_input: pointer to the user_input
@@ -55,7 +53,6 @@ void process_input(const char *user_input)
         {
                 write(STDOUT_FILENO, goodbye_msg, 25);
                 exit(0);
-                
         }
 }
 

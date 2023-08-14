@@ -25,13 +25,17 @@ int main(void)
 	{
 		display_prompt();
 
-        /** reading input... */
+        /** reading input... getting input and putting it in buff, buff_size stores the sise of input*/
 
         bytes = getline(&buff, &buff_size, stdin);
 		/** check if bytes fails and exit*/
 
 		if(bytes == -1)
-	        exit(EXIT_FAILURE);
+		{
+			free(buff);
+            exit(EXIT_FAILURE);
+		}
+	        
 
 			/** get the length of the stdin*/
         buff_size = _strlen(buff);
@@ -43,5 +47,6 @@ int main(void)
         
 		process_input(buff);
 	}
+	free(buff);
 	return (0);
 }
