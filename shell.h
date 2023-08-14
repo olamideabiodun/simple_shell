@@ -29,7 +29,7 @@ void read_input(char *buffer, int max_length)
  */
 void process_input(const char *user_input)
 {
-	char *goodbye_msg = "Goodbye, exiting the shell.\n";
+	char *goodbye_msg = "Goodbye, exiting shell.\n";
         if (strcmp(user_input, "exit") == 0)
         {
                 write(STDOUT_FILENO, goodbye_msg, 2);
