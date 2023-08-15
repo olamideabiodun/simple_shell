@@ -15,11 +15,13 @@ void display_prompt(void)
  *
  * Return: 0.
  */
-int main(void)
+int main(int argc, char *argv[], char *envp[])
 {
 	char *buff = NULL;
     size_t buff_size = 0;
     ssize_t bytes;
+	(void)argc;
+	(void)argv;
 
 	while (1)
 	{
@@ -36,7 +38,6 @@ int main(void)
             exit(EXIT_FAILURE);
 		}
 	        
-
 			/** get the length of the stdin*/
         buff_size = _strlen(buff);
 
@@ -45,7 +46,7 @@ int main(void)
 	    if (buff[buff_size - 1] == '\n')
             buff[buff_size - 1] = '\0';
         
-		process_input(buff);
+		process_input(buff, envp);
 	}
 	free(buff);
 	return (0);
