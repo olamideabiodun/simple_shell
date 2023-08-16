@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 #define MAX_INPUT_LENGTH 100
 
@@ -14,6 +15,7 @@ int _strlen(char *c);
 int _strcmp(const char *str1, const char *str2);
 char _getPath(char **envp);
 char **split_string(const char *input, char delimiter, size_t *word_count);
+void free_string(char **vector, size_t count);
 
 
 /**
@@ -72,7 +74,6 @@ void process_input(const char *user_input, char **envp)
 {
         int i = 0;
         char *path = NULL;
-
         char *goodbye_msg = "Goodbye, exiting shell.\n";
         
         if (_strcmp(user_input, "exit") == 0)
