@@ -18,6 +18,7 @@ char _getPath(char **envp);
 char **split_string(const char *input, char delimiter, size_t *word_count);
 void free_string(char **vector, size_t count);
 char *_strcat(int n, ...);
+char *_strtok(char *str, const char *delim);
 
 /**
  * _strcmp - compares two strings
@@ -74,11 +75,44 @@ void _strcpy(char *des, const char *src, size_t des_len)
 	*des = '\0';
 }
 
+/**
+ * _strlen - counts the length of string
+ * @str: string to count
+ *
+ * Return: counts
+ */
+size_t _strlen(const char *str)
+{
+	size_t len = 0;
+
+	while (*str != '\0')
+	{
+		len++;
+		str++;
+	}
+	return (len);
+}
 
 /**
  * _strdup - duplicates a string
- * @str: string to duplicate
+ * @src: string to duplicate
  *
+ * Return: duplicated string
+ */
+char *_strdup(const char *src)
+{
+	if (src == NULL)
+		return (NULL);
+
+	size_t len = _strlen(src) + 1;
+	char *des = (char *)malloc(len);
+
+	if (*des != NULL)
+	{
+		_strcpy(des, src);
+	}
+	return (des);
+}
 /**
  * process_input - process user's input
  * @user_input: pointer to the user_input
