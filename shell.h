@@ -55,7 +55,31 @@ int _strncmp(const char *s1, const char *s2, size_t n)
     return *(unsigned char *)s1 - *(unsigned char *)s2;
 }
 
+/**
+ * _strcpy - copies one string to another
+ * @des: destination
+ * @src: source
+ * @des_len: destination size
+ */
+void _strcpy(char *des, const char *src, size_t des_len)
+{
+	size_t i = 0;
 
+	while (*src != '\0' && i < des_len -1)
+	{
+		*des = *src;
+		des++;
+		src++;
+		i++;
+	}
+	*des = '\0';
+}
+
+
+/**
+ * _strdup - duplicates a string
+ * @str: string to duplicate
+ *
 /**
  * process_input - process user's input
  * @user_input: pointer to the user_input

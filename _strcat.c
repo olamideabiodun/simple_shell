@@ -14,7 +14,7 @@ int _strlen(char *c)
 }
 
 /**
- * _strcat - concatenates an n number of strigs
+ * _strcat - concatenates a number of strings
  * @n: number of passed strings
  * Return: Concatenated string
  */
@@ -35,10 +35,11 @@ char *_strcat(int n, ...)
         va_end(args);
         
         result = (char*)malloc(length + 1);
-        if (result == NULL) {
-        perror("Memory allocation failed\n");
-        exit(EXIT_FAILURE);
-        }
+
+	if (result == NULL) {
+		perror("Memory allocation failed\n");
+		exit(EXIT_FAILURE);
+	}
         count = n;
         va_start(args, n);
   
