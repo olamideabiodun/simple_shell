@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdarg.h>
+#include <sys/stat.h>
 
 #define MAX_INPUT_LENGTH 100
 
