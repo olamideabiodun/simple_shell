@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdarg.h>
 
 #define MAX_INPUT_LENGTH 100
 
@@ -16,20 +17,8 @@ int _strcmp(const char *str1, const char *str2);
 char _getPath(char **envp);
 char **split_string(const char *input, char delimiter, size_t *word_count);
 void free_string(char **vector, size_t count);
+char *_strcat(int n, ...);
 
-
-/**
- * _strlen - returns number of chars
- * @c: string
- * Return: Success
- */
-int _strlen(char *c)
-{
-        int x = 0;
-        for (; c[x] != '\0'; x++)
-        ;
-        return (x);    
-}
 /**
  * _strcmp - compares two strings
  * @str1: string 1
