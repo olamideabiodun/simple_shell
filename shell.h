@@ -12,14 +12,88 @@
 
 #define MAX_INPUT_LENGTH 100
 
+int main(void);
 void display_prompt(void);
-int _strlen(char *c);
-int _strcmp(const char *str1, const char *str2);
 char _getPath(char **envp);
 char **split_string(const char *input, char delimiter, size_t *word_count);
 void free_string(char **vector, size_t count);
 char *_strcat(int n, ...);
-char *_strtok(char *str, const char *delim);
+
+/**
+ * _strtok - used to split springs into tokens
+ * @str: string to split
+ * @delim: delimiter used to separate strings
+ */
+char *_strtok(char *str, const char *delim)
+{
+	static char *newtstart = NULL;
+	char *tokenstart;
+	bool del = false;
+	size_t i = 0;
+	char *tend;
+
+	if (str != NULL)
+	{
+		newtstart = str;
+	}
+	else if (newtstart == NULL)
+	{
+		return (NULL);
+	}
+
+	tokenstart = newtstart;
+
+	while (*tokenstart != '\0')
+	{
+		del = false;
+		for (; delim[i] != '\0'; i++)
+		{
+			if (*tokenstart == delim[i])
+			{
+				del = true;
+				break;
+			}
+		}
+		if (!del)
+		{
+			break;
+		}
+		tokenstart++;
+	}
+
+	if (*tokenstart == '\0')
+	{
+		newtstart = NULL;
+		return (NULL);
+	}
+
+	tend = tokenstart + 1;
+
+	while (*tend != '\0')
+	{
+		del = false;
+		for (; delim[i] != '\0'; i++)
+		{
+			if (*tend == delim[i])
+			{
+				del = true;
+				break;
+			}
+		}
+		if (del)
+		{
+			*tend = '\0';
+			tokenstart = tend + 1;
+			break;
+		}
+		tend++;
+	}
+	if (*tend == '\0')
+	{
+		newtstart = NULL;
+	}
+	return (tokenstart);
+}
 
 /**
  * _strcmp - compares two strings
@@ -102,15 +176,18 @@ size_t _strlen(const char *str)
  */
 char *_strdup(const char *src)
 {
+	size_t len;
+	char *des;
+
 	if (src == NULL)
 		return (NULL);
 
-	size_t len = _strlen(src) + 1;
-	char *des = (char *)malloc(len);
+	len = _strlen(src) + 1;
+	des = (char *)malloc(len);
 
-	if (*des != NULL)
+	if (des != NULL)
 	{
-		_strcpy(des, src);
+		_strcpy(des, src, 100);
 	}
 	return (des);
 }
