@@ -26,6 +26,8 @@ void _strcpy(char *des, const char *src, size_t des_len);
 size_t _strlen(const char *str);
 char *_strdup(const char *src);
 int _atoi(char *s);
-void process_input(const char *user_input, char **envp);
+void process_input(char *user_input, char **envp);
+char check_file_in_all_paths(char *filename, char *path, struct stat *fileStat);
+bool check_file_exec(char *path, struct stat *fileStat);
 
 #endif

@@ -56,10 +56,12 @@ int main(int argc, char *argv[], char *envp[])
  * process_input - process user's input
  * @user_input: pointer to the user_input
  */
-void process_input(const char *user_input, char **envp)
+void process_input(char *user_input, char **envp)
 {
         int i = 0;
+        char **args;
         char *path = NULL;
+        struct stat fileStat;
         char *goodbye_msg = "Goodbye, exiting shell.\n";
 
         if (_strcmp(user_input, "exit") == 0)
@@ -89,4 +91,9 @@ void process_input(const char *user_input, char **envp)
         write(STDOUT_FILENO, "\nNO PATH DETECTED \n", 20);
         }
 
+       args = _strtok(user_input, " ");
+       check_file_exec(args[0], &fileStat);
+
+       
+    free(args);
 }
