@@ -51,3 +51,42 @@ int main(int argc, char *argv[], char *envp[])
 	free(buff);
 	return (0);
 }
+
+/**
+ * process_input - process user's input
+ * @user_input: pointer to the user_input
+ */
+void process_input(const char *user_input, char **envp)
+{
+        int i = 0;
+        char *path = NULL;
+        char *goodbye_msg = "Goodbye, exiting shell.\n";
+
+        if (_strcmp(user_input, "exit") == 0)
+        {
+                write(STDOUT_FILENO, goodbye_msg, 25);
+                exit(0);
+        }
+
+        for (; envp[i] != NULL; i++)
+        {
+
+        if (_strncmp(envp[i], "Path=", 5) == 0 || _strncmp(envp[i], "PATH=", 5) == 0)
+        {
+            path = envp[i] + 5;
+            break;
+        }
+        }
+
+        if (_strcmp(user_input, "path") == 0)
+        {
+        if (path != NULL)
+        {
+           write(STDOUT_FILENO, path, _strlen(path));
+           write(STDOUT_FILENO, "\n", 2);
+        }
+        else
+        write(STDOUT_FILENO, "\nNO PATH DETECTED \n", 20);
+        }
+
+}

@@ -1,11 +1,11 @@
 #include "shell.h"
 
 /**
- * main - tests all functions
+ * test - tests all functions
  *
  * Return: Always 0, Success.
  */
-int main(void)
+int test()
 {
 	char input[] = {"ball,car,dog,tarek,faruq"};
 	const char *del[] = {","};
