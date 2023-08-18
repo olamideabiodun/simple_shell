@@ -59,7 +59,7 @@ int main(int argc, char *argv[], char *envp[])
 void process_input(char *user_input, char **envp)
 {
         int i = 0;
-        char **args;
+        char *token;
         char *path = NULL;
         struct stat fileStat;
         char *goodbye_msg = "Goodbye, exiting shell.\n";
@@ -91,9 +91,20 @@ void process_input(char *user_input, char **envp)
         write(STDOUT_FILENO, "\nNO PATH DETECTED \n", 20);
         }
 
-       args = _strtok(user_input, " ");
-       check_file_exec(args[0], &fileStat);
+	token = _strtok(user_input, " ");
+	if (token != NULL)
+	{
+		if (check_file_exec(token, &fileStat))
+		{
+			char **command_args = (char **)malloc(2 * sizeof(char *));
 
-       
-    free(args);
+			command_args[0] = token;
+			command_args[1] = NULL;
+
+			if (execv(command_args[0], command_args) == -1)
+			{
+				perror("execution failed\n");
+			}
+		}
+	}
 }

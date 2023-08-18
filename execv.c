@@ -1,9 +1,9 @@
 #include "shell.h"
 
 /**
- * check_file_exec - checks is the path exists
+ * check_file_exec - checks if the path exists
  * @path: path of the file
- * @fileStat: stores info about the file if it it exists
+ * @fileStat: stores info about the file if it exists
  * Return: true for success, false otherwise
 */
 
