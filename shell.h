@@ -9,13 +9,14 @@
 #include <string.h>
 #include <stdarg.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 
 #define MAX_INPUT_LENGTH 100
 
 void display_prompt(void);
 char _getPath(char **envp);
 char **split_string(const char *input, char delimiter, size_t *word_count);
-void free_string(char **vector, size_t count);
+void free_string(char **vector);
 char *_strcat(int n, ...);
 int main(int argc, char *argv[], char *envp[]);
 int test();
@@ -27,7 +28,9 @@ size_t _strlen(const char *str);
 char *_strdup(const char *src);
 int _atoi(char *s);
 void process_input(char *user_input, char **envp);
-char check_file_in_all_paths(char *filename, char *path, struct stat *fileStat);
+char *check_file_in_path(char *filename, struct stat *fileStat, char *path);
 bool check_file_exec(char *path, struct stat *fileStat);
+int _execve(char *path, char **commands, char **envp);
+char *strtok_custom(char *str, const char *delim);
 
 #endif

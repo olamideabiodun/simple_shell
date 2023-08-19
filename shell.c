@@ -1,4 +1,5 @@
 #include "shell.h"
+
 /**
  * display_prompt - function to display the shel =l prompt
  *
@@ -47,6 +48,7 @@ int main(int argc, char *argv[], char *envp[])
             buff[buff_size - 1] = '\0';
         
 		process_input(buff, envp);
+        free(buff);
 	}
 	free(buff);
 	return (0);
@@ -61,7 +63,9 @@ void process_input(char *user_input, char **envp)
         int i = 0;
         char *token;
         char *path = NULL;
+        char **command_args;
         struct stat fileStat;
+       
         char *goodbye_msg = "Goodbye, exiting shell.\n";
 
         if (_strcmp(user_input, "exit") == 0)
@@ -91,20 +95,33 @@ void process_input(char *user_input, char **envp)
         write(STDOUT_FILENO, "\nNO PATH DETECTED \n", 20);
         }
 
-	token = _strtok(user_input, " ");
+	token = strtok(user_input, " ");
 	if (token != NULL)
 	{
-		if (check_file_exec(token, &fileStat))
+        printf("Token --->>> %s\n", token);
+        command_args = (char **)malloc(2 * sizeof(char *));
+        command_args[0] = token;
+		command_args[1] = NULL;
+		if (check_file_exec(command_args[0], &fileStat))
 		{
-			char **command_args = (char **)malloc(2 * sizeof(char *));
-
-			command_args[0] = token;
-			command_args[1] = NULL;
-
-			if (execv(command_args[0], command_args) == -1)
-			{
-				perror("execution failed\n");
-			}
-		}
+            _execve(command_args[0], command_args, envp);
+            free_string(command_args);
+        }
+        else
+        {
+            command_args[0] = check_file_in_path(command_args[0], &fileStat, path);
+            printf("Found executable at: %s\n", command_args[0]);
+            if (command_args[0])
+            {
+                free(command_args[0]);
+                _execve(command_args[0], command_args, envp);
+            }
+            else
+            {
+                perror("error: EXECVE");
+                free_string(command_args);
+            }
+        }
 	}
+
 }

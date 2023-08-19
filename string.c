@@ -129,10 +129,10 @@ return (sum);
  * @count: number of words in the vector.
 */
 
-void free_string(char **vector, size_t count)
+void free_string(char **vector)
 {
     size_t i = 0;
-    for (; i < count; ++i)
+    for (; vector[i] != NULL; ++i)
         free(vector[i]);
     free(vector);
 }
