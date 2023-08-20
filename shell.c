@@ -103,7 +103,7 @@ void process_input(char *user_input, char **envp)
 	command_args[1] = NULL;
 		if (check_file_exec(command_args[0], &fileStat))
 		{
-            _execve(command_args[0], command_args, envp);
+			_execve(command_args[0], command_args, envp);
         }
         else
         {
