@@ -22,19 +22,22 @@ char *check_file_in_path(char *filename, struct stat *fileStat, char *path)
 {
 
 char *full_path;
-char *token = strtok(path, ":");
+char *token_copy = strdup(path);
+char *token = strtok(token_copy, ":");
 
 while (token != NULL)
     {
         full_path = _strcat(3, token, "/", filename);
+	 
         if (check_file_exec(full_path, fileStat))
         {
+	    free(token_copy);
             return full_path;
         }
         
         token = strtok(NULL, ":");
     }
-
+ free(token_copy);
 return (NULL);
 }
 

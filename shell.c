@@ -98,28 +98,26 @@ void process_input(char *user_input, char **envp)
 	token = strtok(user_input, " ");
 	if (token != NULL)
 	{
-        printf("Token --->>> %s\n", token);
         command_args = (char **)malloc(2 * sizeof(char *));
-        command_args[0] = token;
-		command_args[1] = NULL;
+        command_args[0] = _strdup(token);
+	command_args[1] = NULL;
 		if (check_file_exec(command_args[0], &fileStat))
 		{
             _execve(command_args[0], command_args, envp);
-            free_string(command_args);
         }
         else
         {
-            command_args[0] = check_file_in_path(command_args[0], &fileStat, path);
-            printf("Found executable at: %s\n", command_args[0]);
+            command_args[0] = check_file_in_path(command_args[0], &fileStat, path);;
+            command_args[1] = NULL;
             if (command_args[0])
             {
-                free(command_args[0]);
+                
                 _execve(command_args[0], command_args, envp);
             }
             else
             {
                 perror("error: EXECVE");
-                free_string(command_args);
+                free(command_args[0]);
             }
         }
 	}
