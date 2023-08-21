@@ -34,12 +34,11 @@ while (token != NULL)
 	    free(token_copy);
         return full_path;
         }
-        
-        token = strtok(NULL, ":");
+	free(full_path);
+	token = strtok(NULL, ":");
     }
-    free(full_path);
-free(token_copy);
 
+free(token_copy);
 return (NULL);
 }
 
@@ -55,8 +54,8 @@ int _execve(char *path, char **commands, char **envp)
         exit(EXIT_FAILURE);
     }
     if (child_process == 0)
-        execve(path, commands, envp);
-    
+	    execve(path, commands, envp);
+
     if (waitpid(child_process, &status, 0) == -1)
     {
         perror("Error: Fork");

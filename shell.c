@@ -45,12 +45,13 @@ int main(int argc, char *argv[], char *envp[])
 		  /** setting the newline character to NULL terminating character */
 
 	    if (buff[buff_size - 1] == '\n')
-            buff[buff_size - 1] = '\0';
-        
+	    {
+		    buff[buff_size - 1] = '\0';
+		    bytes--;
+	    }
 		process_input(buff, envp);
         free(buff);
 	}
-	free(buff);
 	return (0);
 }
 
@@ -60,7 +61,7 @@ int main(int argc, char *argv[], char *envp[])
  */
 void process_input(char *user_input, char **envp)
 {
-    int i = 0, j = 0;
+    int i = 0;
     int max_args = 10;
     int count = 0;
     char *path = NULL;
@@ -102,7 +103,7 @@ void process_input(char *user_input, char **envp)
     {
         command_args = (char **)malloc((max_args + 1) * sizeof(char *));
         
-        while (token != NULL && count < max_args)
+        while (token != NULL && count <= max_args)
         {
             command_args[count] = _strdup(token);
             count++;
@@ -115,7 +116,7 @@ void process_input(char *user_input, char **envp)
             if (check_file_exec(command_args[0], &fileStat))
             {
                 count = 0;
-                _execve(command_args[0], command_args, envp);
+		_execve(command_args[0], command_args, envp);
 
             }
             else
@@ -124,7 +125,7 @@ void process_input(char *user_input, char **envp)
                 if (temp_result)
                 {
                     count = 0;
-                    _execve(temp_result, command_args, envp);
+		    _execve(temp_result, command_args, envp);
                     free(temp_result);
                 }
                 else
@@ -134,12 +135,11 @@ void process_input(char *user_input, char **envp)
                 }
             }
         }
-             for (; j < count; j++)
+	for (; i <= count; i++)
         {
-            free(command_args[j]);
+		free(command_args[i]);
         }
-        free(command_args);
-       
+	     free(command_args);
     }
 
 }
