@@ -37,8 +37,9 @@ while (token != NULL)
         
         token = strtok(NULL, ":");
     }
+    free(full_path);
 free(token_copy);
-free(full_path);
+
 return (NULL);
 }
 

@@ -60,83 +60,86 @@ int main(int argc, char *argv[], char *envp[])
  */
 void process_input(char *user_input, char **envp)
 {
-int i = 0;
-int count = 0;
-char *token;
-char *path = NULL;
-char *temp_result;
-char **command_args;
-struct stat fileStat;
-char *goodbye_msg = "Goodbye, exiting shell.\n";
+    int i = 0, j = 0;
+    int max_args = 10;
+    int count = 0;
+    char *path = NULL;
+    char *token;
+    char *temp_result;
+    char **command_args;
+    struct stat fileStat;
+    char *goodbye_msg = "Goodbye, exiting shell.\n";
 
-if (_strcmp(user_input, "exit") == 0)
+    if (_strcmp(user_input, "exit") == 0)
     {
         write(STDOUT_FILENO, goodbye_msg, 25);
         exit(0);
     }
 
-for (; envp[i] != NULL; i++)
+    for (; envp[i] != NULL; i++)
     {
-    if (_strncmp(envp[i], "Path=", 5) == 0 || _strncmp(envp[i], "PATH=", 5) == 0)
+        if (_strncmp(envp[i], "Path=", 5) == 0 || _strncmp(envp[i], "PATH=", 5) == 0)
         {
             path = envp[i] + 5;
             break;
         }
     }
 
-if (_strcmp(user_input, "path") == 0)
+    if (_strcmp(user_input, "path") == 0)
     {
         if (path != NULL)
         {
             write(STDOUT_FILENO, path, _strlen(path));
-            write(STDOUT_FILENO, "\n", 2);
+            write(STDOUT_FILENO, "\n", 1);
         }
         else
             write(STDOUT_FILENO, "\nNO PATH DETECTED \n", 20);
         return;
-}
+    }
 
-token = _strtok(user_input, " ");
-if (token != NULL)
+    token = strtok(user_input, " ");
+    if (token != NULL)
     {
-        command_args = (char **)malloc(sizeof(char *));
-        while (token != NULL)
+        command_args = (char **)malloc((max_args + 1) * sizeof(char *));
+        
+        while (token != NULL && count < max_args)
         {
             command_args[count] = _strdup(token);
             count++;
-            command_args = (char **)realloc(command_args, (count + 1) * sizeof(char *));
-            token = _strtok(NULL, " ");
+            token = strtok(NULL, " ");
         }
         command_args[count] = NULL;
 
-	token = _strtok(user_input, " ");
-	if (token != NULL)
-	{
-        command_args = (char **)malloc(2 * sizeof(char *));
-        command_args[0] = _strdup(token);
-	command_args[1] = NULL;
-		if (check_file_exec(command_args[0], &fileStat))
-		{
-			_execve(command_args[0], command_args, envp);
-        }
-
-        if (check_file_exec(command_args[0], &fileStat))
-            _execve(command_args[0], command_args, envp);
-
-        else
+        if (count > 0)
         {
-            temp_result = check_file_in_path(command_args[0], &fileStat, path);
-            if (temp_result)
-	    {
-		    _execve(temp_result, command_args, envp);
-		    free(temp_result);
+            if (check_file_exec(command_args[0], &fileStat))
+            {
+                count = 0;
+                _execve(command_args[0], command_args, envp);
+
             }
             else
             {
-                perror("error: EXECVE");
+                temp_result = check_file_in_path(command_args[0], &fileStat, path);
+                if (temp_result)
+                {
+                    count = 0;
+                    _execve(temp_result, command_args, envp);
+                    free(temp_result);
+                }
+                else
+                {
+                    count = 0;
+                    perror("error: EXECVE");
+                }
             }
         }
-            free_string(command_args);
+             for (; j < count; j++)
+        {
+            free(command_args[j]);
+        }
+        free(command_args);
+       
     }
-    }
+
 }
