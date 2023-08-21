@@ -96,7 +96,7 @@ if (_strcmp(user_input, "path") == 0)
         return;
 }
 
-token = strtok(user_input, " ");
+token = _strtok(user_input, " ");
 if (token != NULL)
     {
         command_args = (char **)malloc(sizeof(char *));
@@ -105,12 +105,11 @@ if (token != NULL)
             command_args[count] = _strdup(token);
             count++;
             command_args = (char **)realloc(command_args, (count + 1) * sizeof(char *));
-            token = strtok(NULL, " ");
+            token = _strtok(NULL, " ");
         }
         command_args[count] = NULL;
 
-<<<<<<< HEAD
-	token = strtok(user_input, " ");
+	token = _strtok(user_input, " ");
 	if (token != NULL)
 	{
         command_args = (char **)malloc(2 * sizeof(char *));
@@ -120,17 +119,17 @@ if (token != NULL)
 		{
 			_execve(command_args[0], command_args, envp);
         }
-=======
+
         if (check_file_exec(command_args[0], &fileStat))
             _execve(command_args[0], command_args, envp);
->>>>>>> 47999f3459ba40e72a10059711a7252c42436862
+
         else
         {
             temp_result = check_file_in_path(command_args[0], &fileStat, path);
             if (temp_result)
-            {
-                _execve(temp_result, command_args, envp);
-                free(temp_result);
+	    {
+		    _execve(temp_result, command_args, envp);
+		    free(temp_result);
             }
             else
             {
@@ -138,5 +137,6 @@ if (token != NULL)
             }
         }
             free_string(command_args);
+    }
     }
 }
