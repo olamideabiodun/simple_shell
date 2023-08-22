@@ -60,7 +60,7 @@ int main(int argc, char *argv[], char *envp[])
  */
 void process_input(char *user_input, char **envp)
 {
-        int i = 0;
+        int i = 0, j = 0, arg_count;
         char *token;
         char *path = NULL;
         char **command_args;
@@ -99,13 +99,25 @@ void process_input(char *user_input, char **envp)
 	token = strtok(user_input, " ");
 	if (token != NULL)
 	{
-        command_args = (char **)malloc(2 * sizeof(char *));
+        command_args = (char **)malloc(MAX_ARGS * sizeof(char *));
+	arg_count = 0;
         command_args[0] = _strdup(token);
 	command_args[1] = NULL;
+
+	while (token != NULL && arg_count < MAX_ARGS - 1)
+	{
+		command_args[arg_count] = _strdup(token);
+		arg_count++;
+		token = strtok(NULL, " ");
+	}
+	command_args[arg_count] = NULL;
+
+	if (arg_count > 0)
+	{
 		if (check_file_exec(command_args[0], &fileStat))
 		{
-            _execve(command_args[0], command_args, envp);
-        }
+			_execve(command_args[0], command_args, envp);
+		}
         else
         {
         path_command = check_file_in_path(command_args[0], &fileStat, path);
@@ -118,8 +130,10 @@ void process_input(char *user_input, char **envp)
         {
             perror("error: EXECVE");
         }
-        }
-        free(command_args[0]);
+	}
+	for (; j < arg_count; j++)
+        free(command_args[j]);
 	}
     free(command_args);
+	}
 }

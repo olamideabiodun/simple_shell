@@ -12,7 +12,7 @@
 #include <sys/wait.h>
 
 #define MAX_INPUT_LENGTH 100
-
+#define MAX_ARGS 100
 void display_prompt(void);
 char _getPath(char **envp);
 char **split_string(const char *input, char delimiter, size_t *word_count);
