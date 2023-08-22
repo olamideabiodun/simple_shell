@@ -32,5 +32,5 @@ char *check_file_in_path(char *filename, struct stat *fileStat, char *path);
 bool check_file_exec(char *path, struct stat *fileStat);
 int _execve(char *path, char **commands, char **envp);
 char *strtok_custom(char *str, const char *delim);
-
+void builtIn(char **input, char **envp);
 #endif
