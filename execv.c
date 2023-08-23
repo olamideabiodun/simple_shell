@@ -28,7 +28,7 @@ char *check_file_in_path(char *filename, struct stat *fileStat, char *path)
 {
 
 char *full_path;
-char *token_copy = strdup(path);
+char *token_copy = _strdup(path);
 char *token = strtok(token_copy, ":");
 
 while (token != NULL)
