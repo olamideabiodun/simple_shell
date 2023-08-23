@@ -20,7 +20,7 @@ char **split_string(const char *input, char delimiter, size_t *word_count);
 void free_string(char **vector);
 char *_strcat(int n, ...);
 int main(int argc, char *argv[], char *envp[]);
-int test();
+int test(void);
 char *_strtok(char *str, const char *delim);
 int _strcmp(const char *str1, const char *str2);
 int _strncmp(const char *s1, const char *s2, size_t n);
