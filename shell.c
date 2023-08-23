@@ -36,13 +36,9 @@ free(buff);
 exit(EXIT_FAILURE);
 }
 buff_size = _strlen(buff);
-if (buff_size > 0 && buff[buff_size - 1] == '\n')
-{
-buff[buff_size - 1] = '\0';
-}
-
+if (buff[buff_size - 1] == '\n')
+ buff[buff_size - 1] = '\0';
 process_input(buff, envp);
-buff_size = 0;
 }
 free(buff);
 return (0);
@@ -55,54 +51,82 @@ return (0);
  */
 void process_input(char *user_input, char **envp)
 {
-int i = 0, j = 0, arg_count;
-char *token;
-char *path = NULL;
-char **command_args;
-char *path_command;
-struct stat fileStat;
-for (; envp[i] != NULL; i++)
-{
-if (_strncmp(envp[i], "Path=", 5) == 0 || _strncmp(envp[i], "PATH=", 5) == 0)
-{
-path = envp[i] + 5;
-break;
-}
-}
+    int i = 0, j = 0, arg_count = 0;
+    char *token;
+    char *path = NULL;
+    char **command_args;
+    char *path_command;
+    struct stat fileStat;
+    
+    for (; envp[i] != NULL; i++)
+    {
+        if (_strncmp(envp[i], "Path=", 5) == 0 || _strncmp(envp[i], "PATH=", 5) == 0)
+        {
+            path = envp[i] + 5;
+            break;
+        }
+    }
 
-token = strtok(user_input, " ");
-if (token != NULL)
-{
-command_args = (char **)malloc(MAX_ARGS * sizeof(char *));
-arg_count = 0;
-command_args[0] = _strdup(token);
-command_args[1] = NULL;
-while (token != NULL && arg_count < MAX_ARGS - 1)
-{
-command_args[arg_count] = _strdup(token);
-arg_count++;
-token = strtok(NULL, " ");
-}
-command_args[arg_count] = NULL;
-if (arg_count > 0)
-{
-builtIn(command_args, envp);
-if (check_file_exec(command_args[0], &fileStat))
-_execve(command_args[0], command_args, envp);
-else
-{
-path_command = check_file_in_path(command_args[0], &fileStat, path);
-if (path_command)
-{
-_execve(path_command, command_args, envp);
-free(path_command);
-}
-else
-perror("error: EXECVE");
-}
-}
-for (; j < arg_count; j++)
-free(command_args[j]);
-}
-free(command_args);
+    token = strtok(user_input, " ");
+    if (token != NULL)
+    {
+      command_args = (char **)malloc((MAX_ARGS + 1) * sizeof(char *));
+        if (command_args == NULL) {
+            perror("Memory allocation failed");
+            return;
+        }
+        
+        command_args[arg_count] = _strdup(token);
+        if (command_args[arg_count] == NULL) {
+            perror("Memory allocation failed");
+            free(command_args);
+            return;
+        }
+        
+        arg_count++;
+        
+        while (token != NULL && arg_count < MAX_ARGS)
+        {
+            token = strtok(NULL, " ");
+            if (token != NULL)
+            {
+                command_args[arg_count] = _strdup(token);
+                if (command_args[arg_count] == NULL) {
+                    perror("Memory allocation failed");
+                    for (j = 0; j < arg_count; j++) {
+                        free(command_args[j]);
+                    }
+                    free(command_args);
+                    return;
+                }
+                arg_count++;
+            }
+        }
+        
+        command_args[arg_count] = NULL;
+        
+        if (arg_count > 0)
+        {
+            builtIn(command_args, envp);
+            if (check_file_exec(command_args[0], &fileStat))
+                _execve(command_args[0], command_args, envp);
+            else
+            {
+                path_command = check_file_in_path(command_args[0], &fileStat, path);
+                if (path_command)
+                {
+                    _execve(path_command, command_args, envp);
+                    free(path_command);
+                }
+                else
+                    perror("error: EXECVE");
+            }
+	    for (j = 0; j < arg_count; j++) {
+            free(command_args[j]);
+        }
+        free(command_args);
+        }
+        
+        
+    }
 }
