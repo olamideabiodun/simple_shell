@@ -36,9 +36,13 @@ free(buff);
 exit(EXIT_FAILURE);
 }
 buff_size = _strlen(buff);
-if (buff[buff_size - 1] == '\n')
- buff[buff_size - 1] = '\0';
+if (buff_size > 0 && buff[buff_size - 1] == '\n')
+{
+buff[buff_size - 1] = '\0';
+}
+
 process_input(buff, envp);
+buff_size = 0;
 }
 free(buff);
 return (0);
