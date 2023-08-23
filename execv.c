@@ -32,45 +32,44 @@ char *token_copy = _strdup(path);
 char *token = strtok(token_copy, ":");
 
 while (token != NULL)
-    {
-        full_path = _strcat(3, token, "/", filename);
-	 
-        if (check_file_exec(full_path, fileStat))
-        {
-	    free(token_copy);
-            return full_path;
-        }
-        free(full_path);
-        token = strtok(NULL, ":");
-    }
+  {
+    full_path = _strcat(3, token, "/", filename);
+    if (check_file_exec(full_path, fileStat))
+      {
+	free(token_copy);
+	return (full_path);
+      }
+    free(full_path);
+    token = strtok(NULL, ":");
+   }
  free(token_copy);
-return (NULL);
+ return (NULL);
 }
 /**
  * _execve - executes a file
- * @filepath: path of the file
+ * @path: path of the file
  * @commands: commands
  * @envp: envp
  * Return: true for success, false otherwise
  */
 int _execve(char *path, char **commands, char **envp)
 {
-    int status;
-    pid_t child_process;
+  int status;
+  pid_t child_process;
 
-    child_process = fork();
-    if (child_process == -1)
+  child_process = fork();
+  if (child_process == -1)
     {
-        perror("Error: Fork");
-        exit(EXIT_FAILURE);
+      perror("Error: Fork");
+      exit(EXIT_FAILURE);
     }
-    if (child_process == 0)
-        execve(path, commands, envp);
-    
-    if (waitpid(child_process, &status, 0) == -1)
+  if (child_process == 0)
+    execve(path, commands, envp);
+
+  if (waitpid(child_process, &status, 0) == -1)
     {
-        perror("Error: Fork");
-        exit(EXIT_FAILURE);
+      perror("Error: Fork");
+      exit(EXIT_FAILURE);
     }
-return (0);
+  return (0);
 }
