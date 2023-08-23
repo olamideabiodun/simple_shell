@@ -6,7 +6,7 @@
  * @input: command
  * @env: env
 */
-void builtIn(char **input, char **envp)
+void builtIn(char **input, char **envp, char *user_input)
 {
     int i = 0;
     int status;
@@ -22,7 +22,10 @@ void builtIn(char **input, char **envp)
         {
             if (input[1] != NULL)
                 status = _atoi(input[1]);
-
+	    else
+            status = 0;
+	    free(user_input);
+	    free_string(input);
             write(STDOUT_FILENO, goodbye_msg, 25);
             exit(status);
         }
