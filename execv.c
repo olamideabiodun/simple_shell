@@ -17,7 +17,13 @@ return (true);
 }
 return (false);
 }
-
+/**
+ * check_file_in_path - checks if the file exists in Path
+ * @filename: filename
+ * @fileStat: stores info about the file if it exists
+ * @path: path
+ * Return: file path
+ */
 char *check_file_in_path(char *filename, struct stat *fileStat, char *path)
 {
 
@@ -40,7 +46,13 @@ while (token != NULL)
  free(token_copy);
 return (NULL);
 }
-
+/**
+ * _execve - executes a file
+ * @filepath: path of the file
+ * @commands: commands
+ * @envp: envp
+ * Return: true for success, false otherwise
+ */
 int _execve(char *path, char **commands, char **envp)
 {
     int status;
