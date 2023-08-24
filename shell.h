@@ -1,7 +1,10 @@
 #ifndef SHELL_H
 #define SHELL_H
 
+extern char **environ;
+
 #include <stdio.h>
+#include <errno.h>
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -13,6 +16,7 @@
 
 #define MAX_INPUT_LENGTH 100
 #define MAX_ARGS 100
+
 
 void display_prompt(void);
 char _getPath(char **envp);
@@ -28,10 +32,13 @@ void _strcpy(char *des, const char *src, size_t des_len);
 size_t _strlen(const char *str);
 char *_strdup(const char *src);
 int _atoi(char *s);
-void process_input(char *user_input, char **envp);
-char *check_file_in_path(char *filename, struct stat *fileStat, char *path);
-bool check_file_exec(char *path, struct stat *fileStat);
-int _execve(char *path, char **commands, char **envp);
+void process_input(char *user_input, char **argv,  char **envp, unsigned int c_count, int *exitStat, int *valid_cmd);
+char *check_file_in_path(char *filename, struct stat *fileStat, char *path, int *valid_cmd);
+bool check_file_exec(char *file, struct stat *fileStat, int *valid_cmd);
+int _execve(char *path, char **commands, char **envp, int *exitStat);
 char *strtok_custom(char *str, const char *delim);
-void builtIn(char **input, char **envp);
+void builtIn(char **input, char **envp, char *user_input, int *exitStat);
+void printerr(char *prgm, char *cmd_C, char *cmd, char *err);
+char *intTOstr(unsigned int n);
+char *_getenv(const char *name);
 #endif

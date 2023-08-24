@@ -6,11 +6,9 @@
  * @input: command
  * @env: env
 */
-void builtIn(char **input, char **envp)
+void builtIn(char **input, char **envp, char *user_input, int *exitStat)
 {
     int i = 0;
-    int status;
-    char *goodbye_msg = "Goodbye, exiting shell.\n";
     if (_strcmp(input[0], "env") == 0 || _strcmp(input[0], "printenv") == 0)
     {
         for (; envp[i] != NULL; i++) {
@@ -20,10 +18,8 @@ void builtIn(char **input, char **envp)
     }
     if (_strcmp(input[0], "exit") == 0)
         {
-            if (input[1] != NULL)
-                status = _atoi(input[1]);
-
-            write(STDOUT_FILENO, goodbye_msg, 25);
-            exit(status);
+	    free(user_input);
+	    free_string(input);
+            exit(*exitStat);
         }
 }

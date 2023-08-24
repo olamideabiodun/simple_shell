@@ -20,25 +20,46 @@ void display_prompt(void)
 int main(int argc, char *argv[], char *envp[])
 {
 	char *buff = NULL;
+	int interactive_mode = isatty(STDIN_FILENO);
+	int exitStat = 0;
+	int valid_cmd = 0;
 	size_t buff_size = 0;
+	unsigned int  c_count = 0;
 	ssize_t bytes;
 	(void) argc;
 	(void) argv;
-
+	
 	while (1)
 	{
-		display_prompt();
+	  if(interactive_mode)
+	    {
+	      display_prompt();
+	    }
 		bytes = getline(&buff, &buff_size, stdin);
 		if (bytes == -1)
 		{
-			free(buff);
-			exit(EXIT_FAILURE);
+		  free(buff);
+		  exit(exitStat);
 		}
+<<<<<<< HEAD
 		if (buff[bytes - 1] == '\n')
 		{
 			buff[bytes - 1] = '\0';
 		}
 		process_input(buff, envp);
+=======
+		c_count++;
+
+		buff_size = _strlen(buff);
+		if (buff[buff_size - 1] == '\n')
+			buff[buff_size - 1] = '\0';
+		if (buff_size > 0)
+		  {
+		    process_input(buff, argv, envp, c_count, &exitStat, &valid_cmd);
+		  }
+		free(buff);
+		buff = NULL;
+>>>>>>> 9c0308f9251533ec32499d55ba3feae7de0256e5
 	}
 
 	free(buff);
@@ -50,11 +71,13 @@ int main(int argc, char *argv[], char *envp[])
  *@user_input: pointer to the user_input
  *@envp: envp
  */
-void process_input(char *user_input, char **envp)
+void process_input(char *user_input, char **argv, char **envp, unsigned int c_count, int *exitStat, int *valid_cmd)
 {
 	int i = 0, j = 0, arg_count = 0;
+	size_t input_length;
 	char *token;
 	char *path = NULL;
+	char *c_count_str;
 	char **command_args;
 	char *path_command;
 	struct stat fileStat;
@@ -75,6 +98,9 @@ void process_input(char *user_input, char **envp)
 		if (command_args == NULL)
 		{
 			perror("Memory allocation failed");
+			for (j = 0; j < arg_count; j++)
+				free(command_args[j]);
+			free(command_args);
 			return;
 		}
 
@@ -82,6 +108,8 @@ void process_input(char *user_input, char **envp)
 		if (command_args[arg_count] == NULL)
 		{
 			perror("Memory allocation failed");
+			for (j = 0; j < arg_count; j++)
+				free(command_args[j]);
 			free(command_args);
 			return;
 		}
@@ -114,27 +142,38 @@ void process_input(char *user_input, char **envp)
 
 		if (arg_count > 0)
 		{
-			builtIn(command_args, envp);
-			if (check_file_exec(command_args[0], &fileStat))
-				_execve(command_args[0], command_args, envp);
+		  builtIn(command_args, envp, user_input, exitStat);
+		       if (check_file_exec(command_args[0], &fileStat, valid_cmd))
+			 _execve(command_args[0], command_args, envp, exitStat);
 			else
 			{
-				path_command = check_file_in_path(command_args[0], &fileStat, path);
+			  path_command = check_file_in_path(command_args[0], &fileStat, path, valid_cmd);
 				if (path_command)
 				{
-					_execve(path_command, command_args, envp);
-					free(path_command);
+				  *exitStat = 0;
+				  _execve(path_command, command_args, envp, exitStat);
+				free(path_command);
 				}
 				else
-					perror("error: EXECVE");
+				  {
+				    c_count_str = intTOstr(c_count);
+				    *exitStat = 127;
+				    printerr(argv[0], c_count_str, command_args[0], ": not found");
+				    free(c_count_str);
+ 
+				  }
 			}
 
 			for (j = 0; j < arg_count; j++)
-			{
 				free(command_args[j]);
-			}
 
 			free(command_args);
 		}
-	}
+        
+	free(token);
+	input_length = strlen(user_input);
+    if (input_length > 0 && user_input[input_length - 1] == '\n') {
+        user_input[input_length - 1] = '\0';
+    }
+}
 }
