@@ -41,13 +41,11 @@ int main(int argc, char *argv[], char *envp[])
 		  free(buff);
 		  exit(exitStat);
 		}
-<<<<<<< HEAD
+
 		if (buff[bytes - 1] == '\n')
 		{
 			buff[bytes - 1] = '\0';
 		}
-		process_input(buff, envp);
-=======
 		c_count++;
 
 		buff_size = _strlen(buff);
@@ -59,7 +57,6 @@ int main(int argc, char *argv[], char *envp[])
 		  }
 		free(buff);
 		buff = NULL;
->>>>>>> 9c0308f9251533ec32499d55ba3feae7de0256e5
 	}
 
 	free(buff);
