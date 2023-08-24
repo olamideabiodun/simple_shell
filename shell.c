@@ -22,11 +22,14 @@ int main(int argc, char *argv[], char *envp[])
 {
 	char *buff = NULL;
 	int interactive_mode = isatty(STDIN_FILENO);
+	int exitStat = 0;
+	int valid_cmd = 0;
 	size_t buff_size = 0;
+	unsigned int  c_count = 0;
 	ssize_t bytes;
 	(void) argc;
 	(void) argv;
-	    
+	
 	while (1)
 	{
 	  if(interactive_mode)
@@ -37,13 +40,17 @@ int main(int argc, char *argv[], char *envp[])
 		if (bytes == -1)
 		{
 		  free(buff);
-		  exit(EXIT_FAILURE);
+		  exit(exitStat);
 		}
+		c_count++;
 
 		buff_size = _strlen(buff);
 		if (buff[buff_size - 1] == '\n')
 			buff[buff_size - 1] = '\0';
-		process_input(buff, envp);
+		if (buff_size > 0)
+		  {
+		    process_input(buff, argv, envp, c_count, &exitStat, &valid_cmd);
+		  }
 		free(buff);
 		buff = NULL;
 	}
@@ -57,12 +64,13 @@ int main(int argc, char *argv[], char *envp[])
  *@user_input: pointer to the user_input
  *@envp: envp
  */
-void process_input(char *user_input, char **envp)
+void process_input(char *user_input, char **argv, char **envp, unsigned int c_count, int *exitStat, int *valid_cmd)
 {
 	int i = 0, j = 0, arg_count = 0;
 	size_t input_length;
 	char *token;
 	char *path = NULL;
+	char *c_count_str;
 	char **command_args;
 	char *path_command;
 	struct stat fileStat;
@@ -127,19 +135,26 @@ void process_input(char *user_input, char **envp)
 
 		if (arg_count > 0)
 		{
-		       builtIn(command_args, envp, user_input);
-			if (check_file_exec(command_args[0], &fileStat))
-				_execve(command_args[0], command_args, envp);
+		  builtIn(command_args, envp, user_input, exitStat);
+		       if (check_file_exec(command_args[0], &fileStat, valid_cmd))
+			 _execve(command_args[0], command_args, envp, exitStat);
 			else
 			{
-				path_command = check_file_in_path(command_args[0], &fileStat, path);
+			  path_command = check_file_in_path(command_args[0], &fileStat, path, valid_cmd);
 				if (path_command)
 				{
-					_execve(path_command, command_args, envp);
-					free(path_command);
+				  *exitStat = 0;
+				  _execve(path_command, command_args, envp, exitStat);
+				free(path_command);
 				}
 				else
-					perror("error: ");
+				  {
+				    c_count_str = intTOstr(c_count);
+				    *exitStat = 127;
+				    printerr(argv[0], c_count_str, command_args[0], ": not found");
+				    free(c_count_str);
+ 
+				  }
 			}
 
 			for (j = 0; j < arg_count; j++)
