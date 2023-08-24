@@ -7,8 +7,7 @@
 
 void display_prompt(void)
 {
-	char *prompt = "$ ";
-	write(STDOUT_FILENO, prompt, 2);
+	write(STDOUT_FILENO, "$ ", 2);
 }
 
 /**
@@ -35,10 +34,10 @@ int main(int argc, char *argv[], char *envp[])
 			free(buff);
 			exit(EXIT_FAILURE);
 		}
-
-		buff_size = _strlen(buff);
-		if (buff[buff_size - 1] == '\n')
-			buff[buff_size - 1] = '\0';
+		if (buff[bytes - 1] == '\n')
+		{
+			buff[bytes - 1] = '\0';
+		}
 		process_input(buff, envp);
 	}
 
@@ -69,7 +68,7 @@ void process_input(char *user_input, char **envp)
 		}
 	}
 
-	token = strtok(user_input, " ");
+	token = _strtok(user_input, " ");
 	if (token != NULL)
 	{
 		command_args = (char **) malloc((MAX_ARGS + 1) * sizeof(char *));
@@ -91,7 +90,7 @@ void process_input(char *user_input, char **envp)
 
 		while (token != NULL && arg_count < MAX_ARGS)
 		{
-			token = strtok(NULL, " ");
+			token = _strtok(NULL, " ");
 			if (token != NULL)
 			{
 				command_args[arg_count] = _strdup(token);
