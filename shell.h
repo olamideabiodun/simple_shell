@@ -37,8 +37,9 @@ char *check_file_in_path(char *filename, struct stat *fileStat, char *path, int 
 bool check_file_exec(char *file, struct stat *fileStat, int *valid_cmd);
 int _execve(char *path, char **commands, char **envp, int *exitStat);
 char *strtok_custom(char *str, const char *delim);
-void builtIn(char **input, char **envp, char *user_input, int *exitStat);
+void builtIn(char **input, char **envp, char *user_input, int *exitStat, unsigned int c_count);
 void printerr(char *prgm, char *cmd_C, char *cmd, char *err);
+void exitErr(char *prgm, int c_count, char *msg, char *err, char *arg1);
 char *intTOstr(unsigned int n);
 char *_getenv(const char *name);
 #endif
